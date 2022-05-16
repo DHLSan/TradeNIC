@@ -1,0 +1,10 @@
+2022-05-16T03:23:41.449353900255-03:23:41 **** Incremental Build of configuration Debug for project lstm_sdk ****
+000-make all 
+000-make --no-print-directory pre-build
+000-a9-linaro-pre-build-step
+000-' '
+000-make --no-print-directory main-build
+000-make[1]: Nothing to be done for 'main-build'.
+00255-
+03:23:41 Build Finished (took 353ms)
+
