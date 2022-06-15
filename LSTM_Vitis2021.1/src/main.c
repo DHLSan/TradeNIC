@@ -164,7 +164,7 @@ int main(){
 
 	for(j = 0; j < NUM; j++){
 		int reset = 1;
-		for(i = 0; i < 48; i++){  	// epoch 49   100 LSTM unit
+		for(i = 0; i < 48; i++){  	// epoch 2   100 LSTM unit
 			float x_test[2] = {input_data[j][i][0], input_data[j][i][1]};
 			lstm(x_test, kernel, recurrent_kernel,recurrent_kernel2,recurrent_kernel3,recurrent_kernel4, bias, lstm_out, reset);
 
