@@ -48,7 +48,7 @@ def main():
         configs['data']['columns']
     )
 
-    """
+    
     # train model
     model = Model()
     model.build_model(configs)
@@ -64,7 +64,7 @@ def main():
         save_dir = configs['model']['save_dir']
     )
 
-    """
+    
 
     x_test , y_test = data.get_test_data(
         seq_len=configs['data']['sequence_length'],
