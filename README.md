@@ -5,7 +5,7 @@ University: Eskisehir Technical University
 
 Supervisor name: Asst. Prof. İsmail SAN (isan@eskisehir.edu.tr)
 
-Participants: İsmail Hakkı İPEK () - Kerem SARI (keremsar30@outlook.com)  
+Participants: İsmail Hakkı İPEK (hakkipek@outlook.com) - Kerem SARI (keremsar30@outlook.com)  
 
 Board used: ZedBoard Zynq-7000 SoC
 
