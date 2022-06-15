@@ -5,3 +5,10 @@ In order to run the code, you should upload your stock exchange dataset and you 
 
 After generating the model you can parse it to see Bias, Kernel (Weights), Recurrent Kernel (Hidden Matrix) using our python code [HERE](https://github.com/DHLSan/TradeNIC/blob/main/LoadingModelUDP/H5fileSender.py)
 or you can download [HDF5](https://support.hdfgroup.org/products/hdf5_tools/)
+
+## Library Versions
+-Keras 2.8.0   
+-Numpy 1.22.3   
+-Tensorflow 2.8.0   
+-Pandas 1.4.2   
+-matplotlib.pyplot 3.5.2  
