@@ -9,7 +9,7 @@
 
 - In udp_recvBack() function both structure is created for both real time and Normalized data frame with 49 sequence. In this project real-time option is not optimized yet.
 
-- For real time option our custom circular buffer implemented to the project.
+- For real time option our custom circular buffer structure implemented to the project.
 
 ## TradeNIC Hardware Implemantation
 
