@@ -9,7 +9,7 @@ Participants: İsmail Hakkı İPEK (hakkipek@outlook.com) - Kerem SARI (keremsar
 
 Board used: ZedBoard Zynq-7000 SoC
 
-Software versions: Vivado 2021.1, Vitis HLS 2021.1, Vitis SDK 2021.1
+Software versions: Vivado 2021.1, Vitis HLS 2021.1, Vitis SDK 2021.1, Python 3.8.10
 
 ## Project Description
 
