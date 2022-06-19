@@ -7,8 +7,6 @@ import matplotlib.pyplot as plt
 from core.data_processor import DataLoader
 from core.model import Model
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.preprocessing import StandardScaler
 import socket
 import websocket, json
 import dateutil.parser
