@@ -1,68 +1,3 @@
-/*
- * Copyright (c) 2009-2013 Xilinx, Inc.  All rights reserved.
- *
- * Xilinx, Inc.
- * XILINX IS PROVIDING THIS DESIGN, CODE, OR INFORMATION "AS IS" AS A
- * COURTESY TO YOU.  BY PROVIDING THIS DESIGN, CODE, OR INFORMATION AS
- * ONE POSSIBLE   IMPLEMENTATION OF THIS FEATURE, APPLICATION OR
- * STANDARD, XILINX IS MAKING NO REPRESENTATION THAT THIS IMPLEMENTATION
- * IS FREE FROM ANY CLAIMS OF INFRINGEMENT, AND YOU ARE RESPONSIBLE
- * FOR OBTAINING ANY RIGHTS YOU MAY REQUIRE FOR YOUR IMPLEMENTATION.
- * XILINX EXPRESSLY DISCLAIMS ANY WARRANTY WHATSOEVER WITH RESPECT TO
- * THE ADEQUACY OF THE IMPLEMENTATION, INCLUDING BUT NOT LIMITED TO
- * ANY WARRANTIES OR REPRESENTATIONS THAT THIS IMPLEMENTATION IS FREE
- * FROM CLAIMS OF INFRINGEMENT, IMPLIED WARRANTIES OF MERCHANTABILITY
- * AND FITNESS FOR A PARTICULAR PURPOSE.
- *
- *--- UDP interface
-
-The UDP interface is similar to that of TCP, but due to the lower
-level of complexity of UDP, the interface is significantly simpler.
-
-- struct udp_pcb *udp_new(void)
-
-  Creates a new UDP pcb which can be used for UDP communication. The
-  pcb is not active until it has either been bound to a local address
-  or connected to a remote address.
-
-- void udp_remove(struct udp_pcb *pcb)
-
-  Removes and deallocates the pcb.
-
-- err_t udp_bind(struct udp_pcb *pcb, ip_addr_t *ipaddr,
-                 u16_t port)
-
-  Binds the pcb to a local address. The IP-address argument "ipaddr"
-  can be IP_ADDR_ANY to indicate that it should listen to any local IP
-  address. The function currently always return ERR_OK.
-
-- err_t udp_connect(struct udp_pcb *pcb, ip_addr_t *ipaddr,
-                    u16_t port)
-
-  Sets the remote end of the pcb. This function does not generate any
-  network traffic, but only set the remote address of the pcb.
-
-- err_t udp_disconnect(struct udp_pcb *pcb)
-
-  Remove the remote end of the pcb. This function does not generate
-  any network traffic, but only removes the remote address of the pcb.
-
-- err_t udp_send(struct udp_pcb *pcb, struct pbuf *p)
-
-  Sends the pbuf p. The pbuf is not deallocated.
-
-- void udp_recv(struct udp_pcb *pcb,
-                void (* recv)(void *arg, struct udp_pcb *upcb,
-                                         struct pbuf *p,
-                                         ip_addr_t *addr,
-                                         u16_t port),
-                              void *recv_arg)
-
-  Specifies a callback function that should be called when a UDP
-  datagram is received.
-
- */
-
 
 #include<malloc.h>
 #include<memory.h>
@@ -159,21 +94,6 @@ void cbuff_add(cbuff_t *cb, float elem)
     for(i=0;i<cb->size;i++){
     	cb->buff[i] =cb->buff[i+1];
     }
-   /* indexCbuff++;
-    if(indexCbuff==2){
-    for(i=2; i< 98;i=i+2){
-        Normalizedbuff[i] = (((float)cb->buff[i] / (float)cb->buff[0]) - 1);
-	}
-	for(i=3; i< 98;i=i+2){
-		Normalizedbuff[i] = (((float)cb->buff[i] / (float)cb->buff[1]) - 1);
-	}
-    //printf("size ne %d\n",cb->size);
-
-   /* for (i = 0; i < cb->count; i++) {
-		printf("normalizedbuffer= %.10f\n",Normalizedbuff[i]);
-	}*/
-   // indexCbuff=0;
-    //}
     cb->buff[cb->size-1] = elem;
    // cb->start = (cb->start + 1 ) %cb->size;
    // cb->count --;
@@ -222,21 +142,7 @@ int i,k,j = 0;
 cbuff_t *cb ;
 void udp_recvBack(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr *addr, u16_t port){
 
-	/*
-	for(j = 0; j < NUM; j++){
-			int reset = 1;
-			for(i = 0; i < 48; i++){  	// epoch 2  100 LSTM unit
-				float x_test[2] = {input_data[j][i][0], input_data[j][i][1]};
-				lstm(x_test, kernel, recurrent_kernel,recurrent_kernel2,recurrent_kernel3,recurrent_kernel4, bias, lstm_out, reset);
-
-					//printf(" lstm_Out : %f\n", lstm_out);
-
-				reset = 0;
-			}
-			dense(lstm_out, dense_w, dense_b, &dense_out);
-			printf(" xtest%d result : %.10f\n",c, dense_out);
-	}*/
-	//printf("is coming %s\n",(char*)p->payload);
+	
 	//printf("data here ??");
 	unsigned port2 = 9998;
 	//struct ip4_addr addr2;
@@ -259,13 +165,12 @@ void udp_recvBack(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr
 		for(i=3; i< 98;i=i+2){
 			Normalizedbuff[i] = (((float)cb->buff[i] / (float)cb->buff[1]) - 1);
 		}
-		//printf("size ne %d\n",cb->size);
 
 		/*for (i = 0; i < cb->count; i++) {
 			printf("normalizedbuffer= %.10f\n",Normalizedbuff[i]);
 		}
-		firstWindow =false;
-*/
+		
+		*/
 	}
 
 	if (dataLoadNum ==98) {
