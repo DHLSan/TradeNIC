@@ -96,21 +96,7 @@ void cbuff_add(cbuff_t *cb, float elem)
     for(i=0;i<cb->size;i++){
     	cb->buff[i] =cb->buff[i+1];
     }
-   /* indexCbuff++;
-    if(indexCbuff==2){
-    for(i=2; i< 98;i=i+2){
-        Normalizedbuff[i] = (((float)cb->buff[i] / (float)cb->buff[0]) - 1);
-	}
-	for(i=3; i< 98;i=i+2){
-		Normalizedbuff[i] = (((float)cb->buff[i] / (float)cb->buff[1]) - 1);
-	}
-    //printf("size ne %d\n",cb->size);
 
-   /* for (i = 0; i < cb->count; i++) {
-		printf("normalizedbuffer= %.10f\n",Normalizedbuff[i]);
-	}*/
-   // indexCbuff=0;
-    //}
     cb->buff[cb->size-1] = elem;
    // cb->start = (cb->start + 1 ) %cb->size;
    // cb->count --;
@@ -159,24 +145,8 @@ int i,k,j = 0;
 cbuff_t *cb ;
 void udp_recvBack(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr *addr, u16_t port){
 
-	/*
-	for(j = 0; j < NUM; j++){
-			int reset = 1;
-			for(i = 0; i < 48; i++){  	// epoch 2  100 LSTM unit
-				float x_test[2] = {input_data[j][i][0], input_data[j][i][1]};
-				lstm(x_test, kernel, recurrent_kernel,recurrent_kernel2,recurrent_kernel3,recurrent_kernel4, bias, lstm_out, reset);
-
-					//printf(" lstm_Out : %f\n", lstm_out);
-
-				reset = 0;
-			}
-			dense(lstm_out, dense_w, dense_b, &dense_out);
-			printf(" xtest%d result : %.10f\n",c, dense_out);
-	}*/
 	//printf("is coming %s\n",(char*)p->payload);
-	//printf("data here ??");
 	unsigned port2 = 9998;
-	//struct ip4_addr addr2;
 	char buf[1024];
 	struct pbuf *txBuf; // packet buffer we are going to send
 
@@ -196,13 +166,11 @@ void udp_recvBack(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr
 		for(i=3; i< 98;i=i+2){
 			Normalizedbuff[i] = (((float)cb->buff[i] / (float)cb->buff[1]) - 1);
 		}
-		//printf("size ne %d\n",cb->size);
 
 		/*for (i = 0; i < cb->count; i++) {
 			printf("normalizedbuffer= %.10f\n",Normalizedbuff[i]);
 		}
-		firstWindow =false;
-*/
+		 */
 	}
 
 	if (dataLoadNum ==98) {
@@ -213,14 +181,12 @@ void udp_recvBack(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr
 			for(i = 2; i < 98; i=i+2){  	// epoch 2  100 LSTM unit
 				float x_test[2] = {Normalizedbuff[i],Normalizedbuff[i+1]};
 				//printf("xtest[%d] =%.10f  xtest[%d] = %.10f\n",i,Normalizedbuff[i],i+1,Normalizedbuff[i+1]);
-				//XLstm_Write_input_data_Words(&Xlstm, 0, x_test, 2);
+				XLstm_Write_input_data_Words(&Xlstm, 0, x_test, 2);
+				XLstm_Start(&Xlstm);
+				while(!XLstm_IsDone(&Xlstm));
+				XLstm_Read_lstm_out_Words(&Xlstm,0,lstm_out,128);
 
-				//XLstm_Start(&Xlstm);
-				//while(!XLstm_IsDone(&Xlstm));
-				//XLstm_Read_lstm_out_Words(&Xlstm,0,lstm_out,128);
-
-				lstm(x_test, kernel, recurrent_kerneludp, bias, lstm_out, reset);
-				//printf("test0 %.10f test1 %.10f\n",x_test[0],x_test[1]);
+				//lstm(x_test, kernel, recurrent_kerneludp, bias, lstm_out, reset);
 				reset = 0;
 			}
 			XTime_GetTime(&tEnd);
@@ -238,7 +204,6 @@ void udp_recvBack(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr
 			//dense(lstm_out, dense_w, dense_b, dense_out);
 			XDense_Read_dense_out_Words(&dense_hw, 0, dense_out, 4);
 
-			//dense(lstm_out, dense_w, dense_b, &dense_out);
 			int len = sprintf(buf, "%d",(666666687 /2)); // mixing the client data
 			txBuf = pbuf_alloc(PBUF_TRANSPORT,len, PBUF_RAM);  // allocate memory for this packet buffer
 			pbuf_take(txBuf,buf, len); // copy the data into the buffer
@@ -251,7 +216,7 @@ void udp_recvBack(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr
 			//printf("cbuff[0]=%.10f\n",cb->buff[0]);
 			printf("xtest%d unNormalized result : %.10f\n",testnum, (dense_out[0]+1)*(cb->buff[0]));
 			pbuf_free(p);
-			//free(Normalizedbuff);
+
 	}
 		dataLoadNum=96;
 	}
