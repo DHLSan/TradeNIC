@@ -1,7 +1,7 @@
 
 #include<malloc.h>
 #include<memory.h>
-//#include "lstm.h"
+#include "lstm.h"
 #include "dense.h"
 /*weights*/
 #include "kernel.h"
@@ -21,6 +21,7 @@
 #include "xuartps.h"
 #include "xparameters.h"
 #include "xlstm.h"
+#include "xdense.h"
 #endif
 #define NEURONS 100
 #define INPUT_DIM 2
@@ -32,7 +33,8 @@ XTime tStart,tEnd;
 int sec, nsec;
 double  ElapsedTime;
 
-XLstm lstm;
+XLstm Xlstm;
+XDense dense_hw;
 
 typedef struct cbuff_{
     float *buff;
@@ -62,7 +64,7 @@ float bias[NEURONS * GATES];
 //float dense_w[NEURONS] = {0.010299869,-0.013958465,-0.0763099,-0.16580215,0.1809934,-0.16051124,-0.011249715,0.013663971,-0.0060081934,-0.020978775,-0.009076708,-0.33787048,0.032517,0.019054716,-0.02905033,0.028050939,0.0016815793,0.16950825,0.08049836,0.058096707,-0.039459378,0.08832708,0.01841564,-0.023049962,0.11344812,-0.055700235,-0.009592007,-0.011404909,0.3319275,-0.021058999,0.033407792,-0.2270017,-0.0049630804,0.012098565,-0.010711817,0.025580455,-0.061309524,-0.020214437,0.026791109,0.53707963,0.09141787,0.020833777,0.044212773,0.04655247,-0.01086574,-0.02795687,-0.07902086,0.088146634,0.022049854,-0.07863125,-0.14977822,-0.26183635,-0.15975763,-0.027181204,0.00014154334,0.0021974621,0.005543602,-0.07867963,-0.015306717,0.044843595,0.06874001,0.106913134,-0.08408778,0.038693998,0.031780634,-0.0037702443,-0.05020762,-0.06954534,-0.0005519091,-0.008113943,-0.16588338,0.04369496,-0.03141565,0.2714834,0.04229218,-0.15212008,-0.023374792,0.012224202,-0.026709221,-0.22890934,0.0033944796,0.024070667,0.014952988,-0.01365405,0.015342665,-0.14303747,-0.025727991,0.16331957,0.024387088,0.0016975971,0.075664215,0.011840762,0.0021902912,0.3104026,0.009398716,0.015903296,0.041287422,0.02401935,0.0019540559,0.042147353};
 float dense_w[NEURONS];
 float dense_b;//= -0.008892165;
-float dense_out;
+float dense_out[4];
 float kernel[4][100 * 4]; //shape=(input_dim, self.units * 4)
 float recurrent_kernel[50][100 * 4]; //shape=(self.units, self.units * 4)
 float recurrent_kernel2[50][100 * 4]; //shape=(self.units, self.units * 4)
@@ -94,6 +96,21 @@ void cbuff_add(cbuff_t *cb, float elem)
     for(i=0;i<cb->size;i++){
     	cb->buff[i] =cb->buff[i+1];
     }
+   /* indexCbuff++;
+    if(indexCbuff==2){
+    for(i=2; i< 98;i=i+2){
+        Normalizedbuff[i] = (((float)cb->buff[i] / (float)cb->buff[0]) - 1);
+	}
+	for(i=3; i< 98;i=i+2){
+		Normalizedbuff[i] = (((float)cb->buff[i] / (float)cb->buff[1]) - 1);
+	}
+    //printf("size ne %d\n",cb->size);
+
+   /* for (i = 0; i < cb->count; i++) {
+		printf("normalizedbuffer= %.10f\n",Normalizedbuff[i]);
+	}*/
+   // indexCbuff=0;
+    //}
     cb->buff[cb->size-1] = elem;
    // cb->start = (cb->start + 1 ) %cb->size;
    // cb->count --;
@@ -142,7 +159,21 @@ int i,k,j = 0;
 cbuff_t *cb ;
 void udp_recvBack(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr *addr, u16_t port){
 
-	
+	/*
+	for(j = 0; j < NUM; j++){
+			int reset = 1;
+			for(i = 0; i < 48; i++){  	// epoch 2  100 LSTM unit
+				float x_test[2] = {input_data[j][i][0], input_data[j][i][1]};
+				lstm(x_test, kernel, recurrent_kernel,recurrent_kernel2,recurrent_kernel3,recurrent_kernel4, bias, lstm_out, reset);
+
+					//printf(" lstm_Out : %f\n", lstm_out);
+
+				reset = 0;
+			}
+			dense(lstm_out, dense_w, dense_b, &dense_out);
+			printf(" xtest%d result : %.10f\n",c, dense_out);
+	}*/
+	//printf("is coming %s\n",(char*)p->payload);
 	//printf("data here ??");
 	unsigned port2 = 9998;
 	//struct ip4_addr addr2;
@@ -165,32 +196,50 @@ void udp_recvBack(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr
 		for(i=3; i< 98;i=i+2){
 			Normalizedbuff[i] = (((float)cb->buff[i] / (float)cb->buff[1]) - 1);
 		}
+		//printf("size ne %d\n",cb->size);
 
 		/*for (i = 0; i < cb->count; i++) {
 			printf("normalizedbuffer= %.10f\n",Normalizedbuff[i]);
 		}
-		
-		*/
+		firstWindow =false;
+*/
 	}
 
 	if (dataLoadNum ==98) {
 		for(j = 0; j < 1; j++){
 			int reset = 1;
+			//XTime_GetTime(&tStart);
+			XTime_GetTime(&tStart);
 			for(i = 2; i < 98; i=i+2){  	// epoch 2  100 LSTM unit
 				float x_test[2] = {Normalizedbuff[i],Normalizedbuff[i+1]};
 				//printf("xtest[%d] =%.10f  xtest[%d] = %.10f\n",i,Normalizedbuff[i],i+1,Normalizedbuff[i+1]);
-				XLstm_Write_input_data_Words(&lstm, 0, x_test, 2);
-				XLstm_Start(&lstm);
-				while(!XLstm_IsDone(&lstm));
-				XLstm_Read_lstm_out_Words(&lstm,0,lstm_out,128);
-				//lstm(x_test, kernel, recurrent_kernel,recurrent_kernel2,recurrent_kernel3,recurrent_kernel4, bias, lstm_out, reset);
+				//XLstm_Write_input_data_Words(&Xlstm, 0, x_test, 2);
+
+				//XLstm_Start(&Xlstm);
+				//while(!XLstm_IsDone(&Xlstm));
+				//XLstm_Read_lstm_out_Words(&Xlstm,0,lstm_out,128);
+
+				lstm(x_test, kernel, recurrent_kerneludp, bias, lstm_out, reset);
 				//printf("test0 %.10f test1 %.10f\n",x_test[0],x_test[1]);
 				reset = 0;
 			}
+			XTime_GetTime(&tEnd);
+			ElapsedTime = 1.0 * (tEnd - tStart) / (COUNTS_PER_SECOND);
+			sec = (int)ElapsedTime;
+			nsec = (int)((ElapsedTime - sec) * 1000000000);
+			printf("clock hızı %.12f\n", COUNTS_PER_SECOND);
+			printf("In  LSTM  HW, Output took %d.%09d\n\r",sec,nsec);
 			//for(i = 0; i<96; i++)
 				//printf("Elem[%d] = %.10f\n", i, cb->buff[i]);
-			dense(lstm_out, dense_w, dense_b, &dense_out);
-			int len = sprintf(buf, "%.10f",dense_out); // mixing the client data
+			XDense_Write_h_state_Words(&dense_hw, 0, lstm_out, 128);
+			//XTime_GetTime(&tStart);
+			XDense_Start(&dense_hw);
+			while(!XDense_IsDone(&dense_hw));
+			//dense(lstm_out, dense_w, dense_b, dense_out);
+			XDense_Read_dense_out_Words(&dense_hw, 0, dense_out, 4);
+
+			//dense(lstm_out, dense_w, dense_b, &dense_out);
+			int len = sprintf(buf, "%d",(666666687 /2)); // mixing the client data
 			txBuf = pbuf_alloc(PBUF_TRANSPORT,len, PBUF_RAM);  // allocate memory for this packet buffer
 			pbuf_take(txBuf,buf, len); // copy the data into the buffer
 
@@ -198,9 +247,9 @@ void udp_recvBack(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr
 			udp_sendto(pcb, txBuf, addr, port2);
 			pbuf_free(txBuf); // free all the memories that we allocated before
 			testnum++;
-			printf(" xtest%d result : %.10f\n",testnum, dense_out);
+			printf(" xtest%d result : %.10f\n",testnum,dense_out[0] );
 			//printf("cbuff[0]=%.10f\n",cb->buff[0]);
-			printf("xtest%d unNormalized result : %.10f\n",testnum, (dense_out+1)*(cb->buff[0]));
+			printf("xtest%d unNormalized result : %.10f\n",testnum, (dense_out[0]+1)*(cb->buff[0]));
 			pbuf_free(p);
 			//free(Normalizedbuff);
 	}
@@ -432,12 +481,17 @@ void udp_recvWeights(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_a
 	}
 	if (states == 5 && statechanged == false ) {
 
-		XLstm_Initialize(&lstm,0);
-		XLstm_Write_kernel_Words(&lstm, 0, kernel, 1024);
-		XLstm_Write_recurrent_kernel_Words(&lstm, 0, recurrent_kerneludp, 65536);
-		XLstm_Write_bias_Words(&lstm, 0, bias, 512);
+		XLstm_Initialize(&Xlstm,0);
+		XLstm_Write_kernel_Words(&Xlstm, 0, kernel, 1024);
+		XLstm_Write_recurrent_kernel_Words(&Xlstm, 0, recurrent_kerneludp, 65536);
+		XLstm_Write_bias_Words(&Xlstm, 0, bias, 512);
 				//XLstm_Set_reset(&lstm, reset);
-		xil_printf("#######HW LSTM Initialize ########\n");
+		xil_printf("#######HW LSTM Initialized ########\n");
+		XDense_Initialize(&dense_hw, 0);
+		XDense_Set_dense_b(&dense_hw, dense_b);
+		XDense_Write_dense_w_Words(&dense_hw, 0, dense_w, 128);
+		xil_printf("#######HW DENSE Initialized ########\n");
+
 
 	}
 
