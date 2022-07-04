@@ -1,4 +1,4 @@
-# Step-by-step Building 
+# Step-by-Step Building 
 
 Creating core IP with HLS:
 * Open Vitis HLS 2021.1
