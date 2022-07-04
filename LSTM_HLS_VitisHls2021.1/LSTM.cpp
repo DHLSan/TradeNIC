@@ -44,18 +44,9 @@ void lstm(
 	float o_state[NEURONS] = {0};
 
     int i, j=0;
-    /*for (i = 0; i < NEURONS; ++i) {
-    	//#pragma HLS PIPELINE II=1
-    	//#pragma HLS unroll factor=2
-            C_state[i] = C_state[i] * f_state[i] + c_state[i] * i_state[i];
-            h_state[i] = tanh(C_state[i]) * o_state[i];
-            lstm_out[i] = 21.20;
-        }
-*/
-
-    if(reset){
+     if(reset){
             for (i = 0; i < NEURONS; i++) {
-				//#pragma HLS PIPELINE II=1
+		#pragma HLS PIPELINE
                 h_state[i] = 0;
                 x_state[i] = 0;
             }
@@ -65,7 +56,7 @@ void lstm(
 
 	for (i = 0; i < INPUT_DIM; i++) {
 		for (j = 0; j < NEURONS; j++) {
-		//#pragma HLS PIPELINE II=1
+		 #pragma HLS PIPELINE
 		//#pragma HLS unroll factor=2
 		 i_state[j] += (kernel[i][j + NEURONS * 0] * input_data[i]);
 		 f_state[j] += (kernel[i][j + NEURONS * 1] * input_data[i]);
@@ -77,7 +68,7 @@ void lstm(
     //W * h(t-1) + W * X
     for (i = 0; i < 100; i++) {
         for (j = 0; j < NEURONS; j++) {
-		//#pragma HLS PIPELINE II=1
+		#pragma HLS PIPELINE
 		//#pragma HLS unroll factor=2
         	i_state[j] += (recurrent_kernel[i][j + NEURONS * 0] * h_state[i]);
             f_state[j] += (recurrent_kernel[i][j + NEURONS * 1] * h_state[i]);
@@ -88,7 +79,7 @@ void lstm(
 
     // W * h(t-1) + W * X + b
     for (i = 0; i < NEURONS ; ++i) {
-	//#pragma HLS PIPELINE II=1
+	#pragma HLS PIPELINE
 	//#pragma HLS unroll factor=2
     	i_state[i] += bias[i + NEURONS * 0];
     	i_state[i] =  sigmoid(i_state[i]);
@@ -105,7 +96,7 @@ void lstm(
 
     //h, c
     for (i = 0; i < NEURONS; ++i) {
-	//#pragma HLS PIPELINE II=1
+	#pragma HLS PIPELINE
 	//#pragma HLS unroll factor=2
         x_state[i] = x_state[i] * f_state[i] + c_state[i] * i_state[i];
         h_state[i] = tanh(x_state[i]) * o_state[i];
