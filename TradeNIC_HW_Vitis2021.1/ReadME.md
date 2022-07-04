@@ -9,19 +9,30 @@ Creating core IP with HLS:
 * Do same operations with [dense.cpp](https://github.com/DHLSan/TradeNIC/blob/main/LSTM_HLS_VitisHls2021.1/dense.cpp)
 
 Creating SoC Design with All Components:
-* Open Vivado 2021.1
-* Create project
-* Choose Zedboard (Zynq-7000 SoC) as destination board
-* Create block design
-* Add ip --> ZynQ7 processing system
-* Click Window --> Add ip catalog --> click right click on list --> select your the path of the lstm IP you exported --> click OK
-* Click Window --> Add ip catalog --> click right click on list --> select your the path of the dense IP you exported --> click OK
-* Add ip --> lstm
-* Add ip --> Dense
-* Click validate design and generate output products
-* Click Generate Bitstream
-* Click File --> Export --> Export Hardware
+* Open Vivado 2021.1.
+* Create project.
+* Choose Zedboard (Zynq-7000 SoC) as destination board.
+* Create block design.
+* Add ip --> ZynQ7 processing system.
+* Click Window --> Add ip catalog --> click right click on list --> select your the path of the lstm IP you exported --> click OK.
+* Click Window --> Add ip catalog --> click right click on list --> select your the path of the dense IP you exported --> click OK.
+* Add ip --> lstm.
+* Add ip --> Dense.
+* Click Adress Editor --> Change lstm_axi_BUS_A master base adress to 0x4010_0000  --> Change range 512 K.
+* Click validate design and generate output products.
+* Click Generate Bitstream.
+* Click File --> Export --> Export Hardware.
 * Click include bitstream and Export.
+
+Creating Software application:
+* Open Vitis 2021.1, choose workspace for new project
+* Create the platform project, select the .xsa file that are created after the export hardware step.
+* Create the application project, select created platform project and select a lwIP Echo Server application project to create your project.
+* Copy and Replace all of the files [HERE](https://github.com/DHLSan/TradeNIC/tree/main/TradeNIC_HW_Vitis2021.1) to src folder. 
+* Ready to run (Dont forget to increase heap and stack size of the project).
+* Download [These](https://github.com/DHLSan/TradeNIC/tree/main/LoadingModelUDP) files and send ready model from your host machine to TradeNIC.
+* After loading the model, Compile [this(BITFINEX)](https://github.com/DHLSan/TradeNIC/blob/main/Bitfinex_API/bitfinex.py) file and perfom prediction with 1m intervals.
+
 
 # TradeNIC System Overall
 - echo.c file includes all the system on the project.    
