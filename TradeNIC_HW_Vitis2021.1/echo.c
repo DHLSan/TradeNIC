@@ -1,8 +1,8 @@
 
 #include<malloc.h>
 #include<memory.h>
-#include "lstm.h"
-#include "dense.h"
+//#include "lstm.h"
+//#include "dense.h"
 /*weights*/
 #include "kernel.h"
 #include "reccurent_kernel.h"
@@ -43,6 +43,7 @@ typedef struct cbuff_{
     int size;
     int count;
 } cbuff_t;
+
 float Normalizedbuff[98];
 int indexCbuff=0;
 int dataLoadNum =0;
@@ -92,19 +93,14 @@ void cbuff_add(cbuff_t *cb, float elem)
   int i;
   int end = cb->end;
   if(cb->count && (end % cb->size) == cb->start){
-   // printf("Overflow Elem[%d] %d lost\n", cb->start, cb->buff[cb->start]);
     for(i=0;i<cb->size;i++){
     	cb->buff[i] =cb->buff[i+1];
     }
 
     cb->buff[cb->size-1] = elem;
-   // cb->start = (cb->start + 1 ) %cb->size;
-   // cb->count --;
   }
   else{
- // printf("Added Elem[%d] = %d\n",cb->end, elem);
   cb->buff[cb->count] = elem;
-  //printf("count ne %d\n",cb->count);
   cb->end = (cb->end+1)% cb->size;
   cb->count++;
   }
@@ -166,11 +162,6 @@ void udp_recvBack(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr
 		for(i=3; i< 98;i=i+2){
 			Normalizedbuff[i] = (((float)cb->buff[i] / (float)cb->buff[1]) - 1);
 		}
-
-		/*for (i = 0; i < cb->count; i++) {
-			printf("normalizedbuffer= %.10f\n",Normalizedbuff[i]);
-		}
-		 */
 	}
 
 	if (dataLoadNum ==98) {
@@ -193,10 +184,8 @@ void udp_recvBack(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr
 			ElapsedTime = 1.0 * (tEnd - tStart) / (COUNTS_PER_SECOND);
 			sec = (int)ElapsedTime;
 			nsec = (int)((ElapsedTime - sec) * 1000000000);
-			printf("clock hızı %.12f\n", COUNTS_PER_SECOND);
 			printf("In  LSTM  HW, Output took %d.%09d\n\r",sec,nsec);
-			//for(i = 0; i<96; i++)
-				//printf("Elem[%d] = %.10f\n", i, cb->buff[i]);
+			
 			XDense_Write_h_state_Words(&dense_hw, 0, lstm_out, 128);
 			//XTime_GetTime(&tStart);
 			XDense_Start(&dense_hw);
@@ -204,16 +193,14 @@ void udp_recvBack(void *arg, struct udp_pcb *pcb, struct pbuf *p, struct ip_addr
 			//dense(lstm_out, dense_w, dense_b, dense_out);
 			XDense_Read_dense_out_Words(&dense_hw, 0, dense_out, 4);
 
-			int len = sprintf(buf, "%d",(666666687 /2)); // mixing the client data
+			int len = sprintf(buf, "%d",(dense_out[0]+1)*(cb->buff[0])); // mixing the client data
 			txBuf = pbuf_alloc(PBUF_TRANSPORT,len, PBUF_RAM);  // allocate memory for this packet buffer
 			pbuf_take(txBuf,buf, len); // copy the data into the buffer
-
-			//IP4_ADDR(&addr2, 192,168,1,5);
+			//IP4_ADDR(&addr2, 192,168,1,5);  // specify ip address if it is not EchoBack
 			udp_sendto(pcb, txBuf, addr, port2);
 			pbuf_free(txBuf); // free all the memories that we allocated before
 			testnum++;
 			printf(" xtest%d result : %.10f\n",testnum,dense_out[0] );
-			//printf("cbuff[0]=%.10f\n",cb->buff[0]);
 			printf("xtest%d unNormalized result : %.10f\n",testnum, (dense_out[0]+1)*(cb->buff[0]));
 			pbuf_free(p);
 
