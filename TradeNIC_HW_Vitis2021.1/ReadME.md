@@ -1,3 +1,28 @@
+# Step-by-step Building 
+
+Creating core IP with HLS:
+* Open Vitis HLS 2021.1
+* Create New Project
+* Downland the [LSTM.cpp](https://github.com/DHLSan/TradeNIC/blob/main/LSTM_HLS_VitisHls2021.1/LSTM.cpp) file and import to sources
+* Click C synthesis.
+* When synthesis is finished, click Export RTL.
+* Do same operations with [dense.cpp](https://github.com/DHLSan/TradeNIC/blob/main/LSTM_HLS_VitisHls2021.1/dense.cpp)
+
+Creating SoC Design with All Components:
+* Open Vivado 2021.1
+* Create project
+* Choose Zedboard (Zynq-7000 SoC) as destination board
+* Create block design
+* Add ip --> ZynQ7 processing system
+* Click Window --> Add ip catalog --> click right click on list --> select your the path of the lstm IP you exported --> click OK
+* Click Window --> Add ip catalog --> click right click on list --> select your the path of the dense IP you exported --> click OK
+* Add ip --> lstm
+* Add ip --> Dense
+* Click validate design and generate output products
+* Click Generate Bitstream
+* Click File --> Export --> Export Hardware
+* Click include bitstream and Export.
+
 # TradeNIC System Overall
 - echo.c file includes all the system on the project.    
 
