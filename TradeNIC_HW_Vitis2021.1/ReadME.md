@@ -29,7 +29,7 @@ Creating Software application:
 * Create the platform project, select the .xsa file that are created after the export hardware step.
 * Create the application project, select created platform project and select a lwIP Echo Server application project to create your project.
 * Copy and Replace all of the files [HERE](https://github.com/DHLSan/TradeNIC/tree/main/TradeNIC_HW_Vitis2021.1) to src folder. 
-* Ready to run (Dont forget to increase heap and stack size of the project).
+* Ready to run (!!Dont forget to increase heap and stack size of the project).
 * Download [These](https://github.com/DHLSan/TradeNIC/tree/main/LoadingModelUDP) files and send ready model or other models from your host machine to TradeNIC.
 * After loading the model, Compile [BITFINEX](https://github.com/DHLSan/TradeNIC/blob/main/Bitfinex_API/bitfinex.py) file and perfom prediction with 1m intervals.
 
