@@ -1,11 +1,11 @@
 
 #include<malloc.h>
 #include<memory.h>
-//#include "lstm.h"
-//#include "dense.h"
+//#include "lstm.h"  // To perfom on SW
+//#include "dense.h" // To perfom on SW
 /*weights*/
-#include "kernel.h"
-#include "reccurent_kernel.h"
+//#include "kernel.h"  // To load ddr3 without network
+//#include "reccurent_kernel.h" // To load ddr3 without network
 
 #include <stdio.h>
 #include <string.h>
