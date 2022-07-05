@@ -22,6 +22,7 @@ Stock and currency exchange transactions are increasing with the emergence of cr
 
 
 # TradeNIC
+![alt-text](https://github.com/DHLSan/TradeNIC/blob/main/TradeNIC_UI/TradeNIC.gif)
 * Our project has been motivated from [RNN-LSTM-Accelerator](https://github.com/JerrytTom/FPGA-Based-LSTM-Accelerator) 
 
 ## Experimental Results
