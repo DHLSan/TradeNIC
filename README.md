@@ -39,11 +39,15 @@ New models were trained by changing the number of neurons in the LSTM layer. It 
 
 * Result of the experiment is shown in the table above. The real and predicted close parameters of BTC-USD are compared in the table. Predicted close values show the data which is prediction of the actual value after 1 minute, and this is also indicated by blue arrows. The deviation rate values are shown as permillage and are often less than 1‰. When the rise and fall intervals of the real values are examined in the table; The green upward arrows which are next to predicted values indicate that BTC-USD will rise after 1 minute, and red downward arrows indicate that it will fall after 1 minute.
 
-### Prediction Latency Optimization Experiments on TradeNIC
+### Prediction Latency Optimization Experiments Results on TradeNIC
 
 The entire algorithm spent about 123.3 milliseconds on the ZynQ7 only processor of the SoC to make a prediction by using 50 window-size. After the hardware acceleration was applied, the prediction time accelerated by x5.81 times and decreased to 21.22 milliseconds. The execution time of the dense layer decreased from about 9.5 us to 6.5 us.
 
 <img src="https://user-images.githubusercontent.com/98567140/177332827-ae959235-9184-4624-a01e-7035ca3b07e5.png" width="700"/>
+
+### LSTM Performance Comparison i7 7th processor vs TradeNIC
+
+
 
 
 
