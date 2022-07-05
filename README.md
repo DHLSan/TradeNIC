@@ -37,7 +37,8 @@ New models were trained by changing the number of neurons in the LSTM layer. It 
 
 ### Prediction Throughput Test Perform on TradeNIC
 
-<img src="https://user-images.githubusercontent.com/98567140/177330902-298763c1-05b6-4b26-a2fa-1216d7624749.png" width="700"/>
+<img src="https://user-images.githubusercontent.com/92585550/177376049-3ce6d645-0505-44d1-b248-a1adb4f1cfe9.jpg" width="700"/>
+
 
 * Result of the experiment, the predicted and real data of the cryptocurrency BTC-USD are given in figure above as normalised. Shown in the orange line are the predictions made with the LSTM hardware accelerator, and in the blue line are the correct historical data. A total of 124 pricing forecasts made at 1-minute intervals are compared on the line graph. As can be seen, the prediction values ​​mostly follow the true data closely. Also, it caught the rising and falling trends of the BTC-USD values. The values ​​are more stable and closer to the real values ​​because of the throughput optimizations which have been designed.
 
