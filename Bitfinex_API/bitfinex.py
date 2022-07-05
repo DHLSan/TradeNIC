@@ -7,7 +7,9 @@ import socket
 # Create api instance of the v2 API
 api_v2 = bitfinex.bitfinex_v2.api_v2()
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+unity_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 adr = ("192.168.1.10", 9999)
+adr2 = ("127.0.0.1", 12345)
 
 # Define query parameters
 pair = 'BTCUSD' # Currency pair of interest
@@ -27,15 +29,18 @@ df = pd.DataFrame(result, columns=names)
 df['Date'] = pd.to_datetime(df['Date'], unit='ms')+pd.Timedelta('03:00:00')
 data  = df
 print(data)
-for i in range(0,50):
+for i in range(0,48):
     x_test_string = str(float(data.Close[i]))
     test_val_byte = str.encode(x_test_string)
     client_socket.sendto(test_val_byte, adr)
-    print(float(data.Close[i]) )
+    unity_socket.sendto(test_val_byte, adr2)
+    time.sleep(0.4)
+    print(float(data.Close[i]))
     x_test_string = str(float(data.Open[i]))
     test_val_byte = str.encode(x_test_string)
     client_socket.sendto(test_val_byte, adr)
-    print(float(data.Open[i]))
+   
+   # print(float(data.Open[i]))
 
 #data.to_csv("historical.csv")
 while(1):
@@ -51,12 +56,13 @@ while(1):
     x_test_string = str(float(data.Close.iloc[-1]))
     test_val_byte = str.encode(x_test_string)
     client_socket.sendto(test_val_byte, adr)
-    print(float(data.Close.iloc[-1]) )
+    client_socket.sendto(test_val_byte, adr2)
+    #print(float(data.Close.iloc[-1]) )
 
     x_test_string = str(float(data.Open.iloc[-1]))
     test_val_byte = str.encode(x_test_string)
     client_socket.sendto(test_val_byte, adr)
-    print(float(data.Open.iloc[-1]))
+    #print(float(data.Open.iloc[-1]))
    
     #print("Open: ",float(data.Open.iloc[-1]))
     #print("close: ",float(data.Close.iloc[-1]))
