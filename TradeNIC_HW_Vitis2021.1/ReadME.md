@@ -24,6 +24,12 @@ Creating SoC Design with All Components:
 * Click File --> Export --> Export Hardware.
 * Click include bitstream and Export.
 
+Opening User Interface:
+* Downland the zip folder [HERE](https://github.com/DHLSan/TradeNIC/tree/main/TradeNIC_UI)
+* Run the RealTimeDataVir.exe file
+* Enter the IP address of your host machine
+* Enter the Port Number 9998
+ 
 Creating Software application:
 * Open Vitis 2021.1, choose workspace for new project
 * Create the platform project, select the .xsa file that are created after the export hardware step.
