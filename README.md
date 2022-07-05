@@ -49,8 +49,6 @@ The entire algorithm spent about 123.3 milliseconds on the ZynQ7 only processor 
 
 <img src="https://user-images.githubusercontent.com/98567140/177332827-ae959235-9184-4624-a01e-7035ca3b07e5.png" width="700"/>
 
-### LSTM Performance Comparison i7 7th processor vs TradeNIC
-
 
 
 
