@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
+#include <hls_math.h>
 
 #define NEURONS 100
 #define INPUT_DIM 2
