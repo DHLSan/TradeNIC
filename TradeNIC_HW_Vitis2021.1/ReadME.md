@@ -59,4 +59,4 @@ Creating Software application:
 ![image](https://user-images.githubusercontent.com/98567140/173881009-ea405000-f291-4ab6-b58a-12e1d92fb73d.png)
 
 ## Prediction Results
-![image](https://user-images.githubusercontent.com/98567140/173881218-afa94804-0893-4b31-bffa-bc309a371040.png)
+![Picture6](https://user-images.githubusercontent.com/92585550/177375649-e3af59ed-8e52-4a22-bfef-3a2ac5ce66c3.jpg)
