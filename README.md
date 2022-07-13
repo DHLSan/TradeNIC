@@ -15,7 +15,7 @@ Video Link : https://www.youtube.com/watch?v=zLlkz4FTuO0
 
 Project Report : [xohw22_111_TradeNIC_Report.pdf](https://github.com/DHLSan/TradeNIC/blob/main/Project_Report/xohw22_111_TradeNIC_Report.pdf)
 
-Last version of the Project [TradeNIC_HW_Vitis2021.1](https://github.com/DHLSan/TradeNIC/tree/main/TradeNIC_HW_Vitis2021.1)
+Last version of the Project & Instructions to build and test project [TradeNIC_HW_Vitis2021.1](https://github.com/DHLSan/TradeNIC/tree/main/TradeNIC_HW_Vitis2021.1)
 
 ## Project Description
 
